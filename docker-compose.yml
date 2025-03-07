@@ -1,0 +1,49 @@
+version: '3.8'
+services:
+  web:
+    build: .
+    ports:
+      - '5300:5300'
+    env_file:
+      - .env
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:13
+    container_name: postgres_standard
+    restart: always
+    environment:
+      POSTGRES_USER: ayo
+      POSTGRES_PASSWORD: ayomide
+      POSTGRES_DB: ayomidedb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ayo -d ayomidedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  redis:
+    image: redis:latest
+    container_name: redis_standard
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_standard
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: standardemail@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: standardpassword
+    ports:
+      - "8081:80"
+    depends_on:
+      - db
+volumes:
+  postgres_data:

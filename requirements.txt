@@ -1,0 +1,14 @@
+flask
+flask_sqlalchemy
+flask_jwt_extended
+flask_migrate
+werkzeug
+python-dotenv
+gunicorn
+flask-cors
+flask-bcrypt
+flask-limiter
+flask-caching
+redis
+psycopg2-binary
+
